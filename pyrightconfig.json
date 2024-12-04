@@ -1,0 +1,13 @@
+{
+    "include": [
+        "main.py",
+        "utils",
+        
+    ],
+    "exclude": [
+        "**/venv",
+        "**/.venv",
+        "**/__pycache__"
+    ],
+    "reportPrivateImportUsage": "none"
+}

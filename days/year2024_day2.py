@@ -1,17 +1,19 @@
 # Advent of Code 2024, day 2
-# from utils.input import parse_input
+from utils.input import read_input
 from aocd import data
 
-def parse_input(raw:str):
+
+def parse_input(raw: str):
     result = raw.splitlines()
     # Optional: Remove any empty lines if needed
     return [list(map(int, line.split())) for line in result if line.strip()]
 
 
-def dampen_problem(report:list[int]):
+def dampen_problem(report: list[int]):
     return
 
-def is_safe(report:list[int]):
+
+def is_safe(report: list[int]):
     diff0 = report[0] - report[1]
     if diff0 == 0:
         return False
@@ -27,15 +29,23 @@ def is_safe(report:list[int]):
                 return False
         return True
 
+
 def check_report(report: list[int]):
     if not is_safe(report):
-        for i in report:
-           report.remove(i)
-           if is_safe(report):
-               return True
+        print("=== Dampening Problem ===")
+        for i, level in enumerate(report):
+            problem = report.pop(i)
+            if is_safe(report):
+                print("Safe!")
+                print(f"{report} problem '{problem}' at i={i}")
+                return True
+        print("Unsafe :(")
         return False
     else:
+        print("Safe!")
+        print(report)
         return True
+
 
 def part1(raw_input: str):
     input = parse_input(raw_input)
@@ -81,7 +91,10 @@ def run(parameters):
 8 6 4 4 1
 1 3 6 7 9
 """
-    data = example
+    input_file = read_input("./days/day02_input.txt")
+
+    # data = example
+    # data = input_file
 
     solution1 = part1(data)
     print(f"Solution 1: {solution1}")
