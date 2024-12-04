@@ -1,5 +1,5 @@
-from utils import input_helper
+from utils import input
 
-example_data = input_helper.read_input("./example.txt")
+example_data = input.read_input("./example.txt")
 
 print(example_data)
