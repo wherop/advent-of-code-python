@@ -2,7 +2,7 @@ import argparse
 import importlib.util
 import sys
 from pathlib import Path
-from generate_day import create_day
+from utils.generate_day import create_day
 from utils import date
 
 def load_day(year, day):

@@ -1,8 +1,6 @@
 {
     "include": [
-        "main.py",
-        "utils",
-        
+        "src"   
     ],
     "exclude": [
         "**/venv",
