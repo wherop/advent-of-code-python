@@ -1,7 +1,11 @@
 import argparse
 from pathlib import Path
+from constants import APP_DIR
 
-template_dir = Path("template")
+TEMPLATE_PATH = APP_DIR + "template"
+DAYS_PATH = APP_DIR + "days"
+
+template_dir = Path(TEMPLATE_PATH)
 template_name = "year0000_day00.py"
 template_path = template_dir / template_name
 with open(template_path, "r") as file:
@@ -9,7 +13,7 @@ with open(template_path, "r") as file:
 
 def create_day(year, day):
     # Construct the file path
-    days_dir = Path("days")
+    days_dir = Path(DAYS_PATH)
     days_dir.mkdir(exist_ok=True)
     file_name = f"year{year}_day{day}.py"
     file_path = days_dir / file_name

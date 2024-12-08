@@ -4,13 +4,15 @@ import sys
 from pathlib import Path
 from utils.generate_day import create_day
 from utils import date
+from constants import APP_DIR
 
+DAYS_PATH = APP_DIR + "days"
 
 def load_day(year: int, day: int):
     # Construct the filename based on year and day
     file_name = f"year{year}_day{day}.py"
-    day_path = Path("days") / file_name
-
+    day_path = Path(DAYS_PATH) / file_name
+ 
     # Check if the file exists
     if not day_path.is_file():
         print(f"Error: No day found for year {year} and day {day}.")
