@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 
 template_dir = Path("template")
@@ -24,19 +23,3 @@ def create_day(year, day):
         file.write(template.format(year=year, day=day))
 
     print(f"Day {file_name} created at {file_path}")
-
-def main():
-    # Set up argument parser
-    parser = argparse.ArgumentParser(description="Generate a day for a specific year and day.")
-    parser.add_argument("year", type=int, help="Year of the day (e.g., 2024)")
-    parser.add_argument("day", type=int, choices=range(1, 26), help="Day of the challenge (1-25)")
-
-    # Parse arguments
-    args = parser.parse_args()
-    year, day = args.year, args.day
-
-    # Create day
-    create_day(year, day)
-
-if __name__ == "__main__":
-    main()
