@@ -2,8 +2,6 @@
 from src.utils.input import read_input
 from aocd import data
 
-# from src.main import run
-
 def parse_input(raw_input):
     return raw_input
 
@@ -40,15 +38,12 @@ parameters = {{
     "only_tests": True,
 }}
 
-# run(parameters)
 
+def run(parameters):
+    example = ""
+    # input_file = read_input("./days/day00_input.txt")
 
-def run ():
-    print(parameters)
-
-    input_file = read_input("./days/day00_input.txt")
-
-    # data = example
+    data = example
     # data = input_file
 
     solution1 = part1(data)
@@ -56,4 +51,3 @@ def run ():
 
     solution2 = part2(data)
     print(f"Solution 2: {solution2}")
-    # 431 too high
