@@ -33,7 +33,8 @@ def part1(raw_input: str):
 
 def part2(raw_input: str):
     input = parse_input(raw_input)
-
+    controlled_sections = re.split(regex_do,input)
+    print(controlled_sections)
     return
 
 
@@ -70,7 +71,7 @@ def run(parameters):
 
     # input_file = read_input("./days/day03_input.txt")
 
-    # data = example
+    data = example
     # data = input_file
 
     solution1 = part1(data)
