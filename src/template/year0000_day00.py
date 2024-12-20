@@ -47,7 +47,7 @@ def run(parameters):
     # data = input_file
 
     solution1 = part1(data)
-    print(f"Solution 1: {solution1}")
+    print(f"Solution 1: {{solution1}}")
 
     solution2 = part2(data)
-    print(f"Solution 2: {solution2}")
+    print(f"Solution 2: {{solution2}}")
