@@ -38,9 +38,14 @@ def main():
         description="Run a specific day based on year and day."
     )
     parser.add_argument(
-        "--year", default=date.get_year(), type=int, help="Year of the day (e.g., 2024)"
+        "-y",
+        "--year",
+        default=date.get_year(),
+        type=int,
+        help="Year of the day (e.g., 2024)",
     )
     parser.add_argument(
+        "-d",
         "--day",
         default=date.get_day(),
         type=int,
