@@ -4,7 +4,7 @@ from aocd import data
 
 
 def parse_input(raw_input: str):
-    matrix = [list(line) for line in raw_input.splitlines()]
+    matrix = [list(line) for line in raw_input.strip().splitlines()]
     return matrix
 
 
@@ -21,9 +21,9 @@ def within_range(coords, matrix):
 
 
 def find_letter(letter, matrix: list[list[str]]):
-    print(f"First letter is: {letter}")
+    # print(f"First letter is: {letter}")
     return [
-        (row, col)
+        (col, row)
         for row, line in enumerate(matrix)
         for col, char in enumerate(line)
         if char == letter
@@ -33,9 +33,13 @@ def find_letter(letter, matrix: list[list[str]]):
 def find_direction(
     postition: tuple[int, int], char: str, matrix: list[list[str]]
 ) -> list[tuple[int, int]]:
-    directions = [(-1, -1), (-1, 0), (1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    directions = [
+        (-1, -1), (-1, 0), (-1, 1), 
+        (0, -1),           (0, 1), 
+        (1, -1),  (1, 0),  (1, 1)
+    ]
 
-    y, x = postition
+    x, y = postition
 
     valid_directions = []
     for dx, dy in directions:
@@ -73,13 +77,26 @@ def check_letters_iter(
     direction: tuple[int, int],
     matrix: list[list[str]],
 ):
+    chars_coords: list[tuple[str,tuple[int,int]]]  = []
     x, y = position
     for char in word[1:]:
         x, y = add_coords((x, y), direction)
         if not within_range((x, y), matrix) or char != matrix[y][x]:
             return False
-    
+        chars_coords.append((char,(x,y)))
+    # print_word(chars_coords, position, word[0], matrix)
     return True
+
+def print_word(chars_coords: list[tuple[str,tuple[int,int]]], position: tuple[int,int], first_char: str, matrix: list[list[str]]):
+    dot_matrix = [['.']*len(i) for i in matrix]
+    x0, y0 = position
+    dot_matrix[y0][x0] = first_char
+    for item in chars_coords:
+        x, y = item[1]
+        dot_matrix[y][x] = item[0]
+
+    for line in dot_matrix:
+        print("".join(line))
 
 
 def part1(raw_input: str):
@@ -95,8 +112,9 @@ def part1(raw_input: str):
         potential_directions = find_direction(char_position, WORD[1], input)
         m_count += len(potential_directions)
         for direction in potential_directions:
-            if check_letters_recurs(WORD, char_position, direction, input):
+            if check_letters_iter(WORD, char_position, direction, input):
                 word_count += 1
+                # print(word_count)
     print(f"M's: {m_count}")
     return word_count
 
@@ -145,11 +163,12 @@ MXMXAXMASX
 """
     # input_file = read_input("./days/day00_input.txt")
 
-    data = example
+    # data = example
     # data = input_file
 
     solution1 = part1(data)
     print(f"Solution 1: {solution1}")
+    # 2300 is too low
 
     solution2 = part2(data)
     print(f"Solution 2: {solution2}")
