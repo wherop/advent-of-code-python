@@ -1,5 +1,5 @@
 # Advent of Code {year}, day {day}
-from src.utils.input import read_input
+from utils.input import read_input
 from aocd import data
 
 def parse_input(raw_input):
