@@ -20,6 +20,10 @@ def within_range(coords, matrix):
     return False
 
 
+def opposite_dir(direction):
+    return tuple([val * -1 for val in direction])
+
+
 def find_letter(letter, matrix: list[list[str]]):
     # print(f"First letter is: {letter}")
     return [
@@ -31,14 +35,11 @@ def find_letter(letter, matrix: list[list[str]]):
 
 
 def find_direction(
-    postition: tuple[int, int], char: str, matrix: list[list[str]]
+    postition: tuple[int, int],
+    char: str,
+    directions: list[tuple[int, int]],
+    matrix: list[list[str]],
 ) -> list[tuple[int, int]]:
-    directions = [
-        (-1, -1), (-1, 0), (-1, 1), 
-        (0, -1),           (0, 1), 
-        (1, -1),  (1, 0),  (1, 1)
-    ]
-
     x, y = postition
 
     valid_directions = []
@@ -67,7 +68,7 @@ def check_letters_recurs(
 
     if not within_range((x, y), matrix) or current_letter != matrix[y][x]:
         return False
-    
+
     return check_letters_recurs(word, (x, y), direction, matrix, index + 1)
 
 
@@ -77,18 +78,24 @@ def check_letters_iter(
     direction: tuple[int, int],
     matrix: list[list[str]],
 ):
-    chars_coords: list[tuple[str,tuple[int,int]]]  = []
+    chars_coords: list[tuple[str, tuple[int, int]]] = []
     x, y = position
     for char in word[1:]:
         x, y = add_coords((x, y), direction)
         if not within_range((x, y), matrix) or char != matrix[y][x]:
             return False
-        chars_coords.append((char,(x,y)))
+        chars_coords.append((char, (x, y)))
     # print_word(chars_coords, position, word[0], matrix)
     return True
 
-def print_word(chars_coords: list[tuple[str,tuple[int,int]]], position: tuple[int,int], first_char: str, matrix: list[list[str]]):
-    dot_matrix = [['.']*len(i) for i in matrix]
+
+def print_word(
+    chars_coords: list[tuple[str, tuple[int, int]]],
+    position: tuple[int, int],
+    first_char: str,
+    matrix: list[list[str]],
+):
+    dot_matrix = [["."] * len(i) for i in matrix]
     x0, y0 = position
     dot_matrix[y0][x0] = first_char
     for item in chars_coords:
@@ -99,30 +106,58 @@ def print_word(chars_coords: list[tuple[str,tuple[int,int]]], position: tuple[in
         print("".join(line))
 
 
+def spot_is_x(spot, word, directions, matrix):
+    potential_directions = find_direction(spot, word[0], directions, matrix)
+    if len(potential_directions) != 2:
+        # print(f"Not X: Nr/o M's {len(potential_directions)}" )
+        return False
+    for direction in potential_directions:
+        if not check_letters_iter(
+            word, add_coords(spot, direction), opposite_dir(direction), matrix
+        ):
+            # print(f"Does not match {word} at {spot} from {add_coords(spot, direction)} in {opposite_dir(direction)} direction.")
+            return False
+    return True
+
+
 def part1(raw_input: str):
     input = parse_input(raw_input)
 
     WORD = "XMAS"
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
     first_char_coord_list = find_letter(WORD[0], input)
-    print(f"X's: {len(first_char_coord_list)}")
+    # print(f"X's: {len(first_char_coord_list)}")
     word_count = 0
     m_count = 0
     for char_position in first_char_coord_list:
-        potential_directions = find_direction(char_position, WORD[1], input)
+        potential_directions = find_direction(char_position, WORD[1], directions, input)
         m_count += len(potential_directions)
         for direction in potential_directions:
             if check_letters_iter(WORD, char_position, direction, input):
                 word_count += 1
                 # print(word_count)
-    print(f"M's: {m_count}")
+    # print(f"M's: {m_count}")
     return word_count
 
 
 def part2(raw_input: str):
     input = parse_input(raw_input)
 
-    return
+    WORD = "MAS"
+    anchor_char = WORD[1]
+    directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+    spot_coord_list = find_letter(anchor_char, input)
+    # print(f"A's: {len(spot_coord_list)}")
+
+    word_count = 0
+    for candidate_spot in spot_coord_list:
+        if spot_is_x(candidate_spot, WORD, directions, input):
+            word_count += 1
+            # print(f"Found one at {candidate_spot}!")
+
+    return word_count
 
 
 parameters = {
@@ -150,7 +185,8 @@ parameters = {
 
 
 def run(parameters):
-    example = """MMMSXXMASM
+    example = """
+MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
 MSAMASMSMX
