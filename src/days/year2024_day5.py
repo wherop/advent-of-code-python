@@ -65,8 +65,37 @@ def get_middle(update: tuple[int, ...]):
     else:
         return update[int(middle - 1)], update[int(middle)]
 
-def get_corrected_update(update, rules):
-    return
+
+def get_corrected_middles(incorrect_updates, rules):
+    middle_pages = []
+    for update_tuple in incorrect_updates:
+        update = list(update_tuple)
+        change_count = 0
+        while is_incorrect(tuple(update), rules) and change_count < 100:
+            for page1, dependent_pages in rules.items():
+                if page1 not in update:
+                    continue
+                for page2 in dependent_pages:
+                    if page2 not in update:
+                        continue
+                    i = update.index(page1)
+                    j = update.index(page2)
+                    if i > j:
+                        update.insert(i, update.pop(j))
+            change_count += 1
+
+        if 100 <= change_count:
+            print(f"Error: Could not resolve in {change_count} changes.")
+            return
+
+        middle_page = get_middle(tuple(update))
+        if isinstance(middle_page, int):
+            middle_pages.append(middle_page)
+        else:
+            print("Error: Update has even number of pages!")
+
+    return middle_pages
+
 
 def part1(raw_input: str):
     rules, updates = parse_input(raw_input)
@@ -87,21 +116,14 @@ def part2(raw_input: str):
     rules_long, updates = parse_input(raw_input)
     rules = collapse_rules(rules_long)
 
-    middle_pages = []
-    for update_tuple in updates:
-        update = list(update_tuple)
-        change_count = 0
-        while is_incorrect(tuple(update), rules) and change_count < 100:
+    incorrect_updates = [update for update in updates if is_incorrect(update, rules)]
 
+    middle_pages = get_corrected_middles(incorrect_updates, rules)
 
+    if not middle_pages:
+        return 0
 
-            change_count += 1
-
-        if 100 <= change_count:
-            print(f"Error: Could not resolve in {change_count} changes.")
-            return
-        
-    return
+    return sum(middle_pages)
 
 
 parameters = {
